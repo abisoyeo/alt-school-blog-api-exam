@@ -1,4 +1,5 @@
 const calculateReadingTime = (text) => {
+  console.log("Inside calculateReadingTime with body:", text);
   if (!text || typeof text !== "string") {
     return 0;
   }
