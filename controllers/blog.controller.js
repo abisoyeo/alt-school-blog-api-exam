@@ -13,16 +13,19 @@ const ApiError = require("../utils/api-error.util");
 // Create a new blog post
 exports.createBlogPost = async (req, res, next) => {
   try {
-    const { title, description, body, tags: rawTags } = req.body;
+    const authorId = req.user._id;
+    const { title, description, body, tags } = req.validated.body;
 
-    const tagObjectIds = await SaveTags(rawTags);
+    const tagObjectIds = await SaveTags(tags);
 
     const blogData = {
       title,
       description,
       body,
       tags: tagObjectIds,
-      author: "6846bd13ac4628c0114e8e8b",
+      author: authorId,
+      state: "draft",
+      read_count: 0,
     };
 
     const blog = await createBlog(blogData);
@@ -39,13 +42,7 @@ exports.createBlogPost = async (req, res, next) => {
 // Get all blog posts
 exports.getBlogPosts = async (req, res, next) => {
   try {
-    // Validate query parameters
-    const { error, value } = blogValidation.listBlogs.validate(req.query);
-    if (error) {
-      throw new ApiError(400, error.details[0].message);
-    }
-
-    const result = await getAllBlogs(value);
+    const result = await getAllBlogs(req.validated.query);
 
     res.status(200).json({
       message: "Published blogs fetched successfully",
@@ -71,8 +68,78 @@ exports.getBlogPost = async (req, res, next) => {
     const updatedBlogPost = await incrementBlogReadCount(blogId);
 
     res.status(200).json({
-      message: "success",
+      message: "Blog post fetched successfully",
       data: updatedBlogPost,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get author's blog posts
+exports.getMyBlogPosts = async (req, res, next) => {
+  try {
+    const authorId = req.user._id;
+    const query = req.validated.query || {};
+    query.authorId = authorId;
+
+    const result = await getAllBlogs(query);
+
+    res.status(200).json({
+      message: "Your blogs fetched successfully",
+      data: result.blogs || [],
+      pagination: result.pagination,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get single blog post by author
+exports.getMyBlogPost = async (req, res, next) => {
+  try {
+    const blogId = req.params.id;
+    const authorId = req.user._id;
+
+    const blogPost = await getBlogById(blogId);
+
+    if (!blogPost || blogPost.author._id.toString() !== authorId.toString()) {
+      throw new ApiError(404, "Blog post not found");
+    }
+
+    res.status(200).json({
+      message: "Your blog fetched successfully",
+      data: blogPost,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Publish blog post
+exports.publishBlogPost = async (req, res, next) => {
+  try {
+    const blogId = req.params.id;
+    const authorId = req.user._id;
+
+    const existingBlog = await getBlogById(blogId);
+
+    if (
+      !existingBlog ||
+      existingBlog.author._id.toString() !== authorId.toString()
+    ) {
+      throw new ApiError(404, "Blog not found");
+    }
+
+    if (existingBlog.state === "published") {
+      throw new ApiError(400, "Blog is already published");
+    }
+
+    const updatedBlog = await updateBlog(blogId, { state: "published" });
+
+    res.status(200).json({
+      message: "Blog published successfully",
+      blog: updatedBlog,
     });
   } catch (error) {
     next(error);
@@ -83,18 +150,23 @@ exports.getBlogPost = async (req, res, next) => {
 exports.updateBlogPost = async (req, res, next) => {
   try {
     const blogId = req.params.id;
-    const { title, description, body, state, tags: rawTags } = req.body;
+    const authorId = req.user._id;
+
+    const { title, description, body, state, tags } = req.validated.body;
 
     const existingBlog = await getBlogById(blogId);
 
-    if (!existingBlog) {
+    if (
+      !existingBlog ||
+      existingBlog.author._id.toString() !== authorId.toString()
+    ) {
       throw new ApiError(404, "Blog not found");
     }
 
     // Process tags if they are being updated
     let tagObjectIds = existingBlog.tags;
-    if (rawTags !== undefined) {
-      tagObjectIds = await SaveTags(rawTags);
+    if (tags !== undefined) {
+      tagObjectIds = await SaveTags(tags);
     }
 
     // Prepare the update payload
@@ -103,7 +175,8 @@ exports.updateBlogPost = async (req, res, next) => {
     if (description !== undefined) updatePayload.description = description;
     if (body !== undefined) updatePayload.body = body;
     if (state !== undefined) updatePayload.state = state;
-    if (tagObjectIds !== undefined) updatePayload.tags = tagObjectIds;
+    if (tagObjectIds !== existingBlog.tags) updatePayload.tags = tagObjectIds;
+    updatePayload.updatedAt = new Date();
 
     const updatedBlog = await updateBlog(blogId, updatePayload);
 
@@ -120,10 +193,14 @@ exports.updateBlogPost = async (req, res, next) => {
 exports.deleteBlogPost = async (req, res, next) => {
   try {
     const blogId = req.params.id;
+    const authorId = req.user._id;
 
     const existingBlog = await getBlogById(blogId);
 
-    if (!existingBlog) {
+    if (
+      !existingBlog ||
+      existingBlog.author._id.toString() !== authorId.toString()
+    ) {
       throw new ApiError(404, "Blog not found");
     }
 

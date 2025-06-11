@@ -11,22 +11,20 @@ exports.createBlog = async (blogData) => {
 
 // Get all blogs
 exports.getAllBlogs = async (query) => {
-  const { page, limit, title, author, tags, sort_by, order } = query;
+  const { page, limit, title, author, authorId, tags, state, sort_by, order } =
+    query;
 
   // Initialize filter and sort objects
   const filter = {};
   const sort = {};
   const skip = (page - 1) * limit;
 
-  // Only published blogs by default
-  filter.state = "published";
-
   // Search by title
   if (title) {
     filter.title = { $regex: title, $options: "i" };
   }
 
-  // Filter by author
+  // Filter by author name
   if (author) {
     const users = await User.find(
       {
@@ -43,6 +41,17 @@ exports.getAllBlogs = async (query) => {
     } else {
       filter.author = null;
     }
+  }
+
+  // Filter by author ID
+  if (authorId) {
+    filter.author = authorId;
+    if (state) {
+      filter.state = state;
+    }
+  } else {
+    // Default to published state for public blogs
+    filter.state = "published";
   }
 
   // Filter by tags

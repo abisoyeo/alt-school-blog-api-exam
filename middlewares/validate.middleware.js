@@ -1,6 +1,9 @@
-const validate = (schema) => {
+const ApiError = require("../utils/api-error.util");
+
+const validate = (schema, source = "body") => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.body, {
+    const dataToValidate = req[source];
+    const { error, value } = schema.validate(dataToValidate, {
       abortEarly: false,
       stripUnknown: true,
     });
@@ -9,14 +12,22 @@ const validate = (schema) => {
       const errorMessage = error.details
         .map((detail) => detail.message)
         .join(", ");
-      return res.status(400).json({
-        success: false,
-        message: errorMessage,
-      });
+      return next(new ApiError(400, errorMessage));
     }
 
+    req.validated = req.validated || {};
+    req.validated[source] = value;
     next();
   };
 };
 
-module.exports = validate;
+const useValidatedData = (req, res, next) => {
+  if (req.validated?.body) {
+    req.body = req.validated.body;
+  }
+  next();
+};
+module.exports = {
+  validate,
+  useValidatedData,
+};

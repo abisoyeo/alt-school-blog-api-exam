@@ -9,7 +9,7 @@ exports.authenticateJWT = (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid or expired token",
+        message: "Invalid or expired token. Please Login again.",
       });
     }
 

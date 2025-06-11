@@ -17,6 +17,18 @@ const authValidation = {
       "string.min": "Password must be at least 6 characters long",
       "any.required": "Password is required",
     }),
+    bio: Joi.string().max(500).trim().optional().messages({
+      "string.max": "Bio cannot exceed 500 characters",
+    }),
+    avatar: Joi.string().uri().optional().messages({
+      "string.uri": "Avatar must be a valid URL",
+    }),
+    social_links: Joi.object({
+      twitter: Joi.string().optional().allow(""),
+      linkedin: Joi.string().optional().allow(""),
+      github: Joi.string().optional().allow(""),
+      website: Joi.string().uri().optional().allow(""),
+    }).optional(),
   }),
 
   // User login validation
@@ -32,7 +44,8 @@ const authValidation = {
 };
 
 const blogValidation = {
-  create: Joi.object({
+  // Create blog validation
+  createBlog: Joi.object({
     title: Joi.string().required().messages({
       "any.required": "Title is required",
     }),
@@ -40,17 +53,29 @@ const blogValidation = {
     body: Joi.string().required().messages({
       "any.required": "Body is required",
     }),
-    state: Joi.string().valid("draft", "published").optional(),
+    state: Joi.string().valid("draft", "published").optional().default("draft"),
+    tags: Joi.array()
+      .items(Joi.string().trim().min(1))
+      .max(10)
+      .optional()
+      .default([]),
   }),
 
-  update: Joi.object({
+  // Update blog validation
+  updateBlog: Joi.object({
     title: Joi.string().optional(),
     description: Joi.string().optional(),
     body: Joi.string().optional(),
     state: Joi.string().valid("draft", "published").optional(),
+    tags: Joi.array()
+      .items(Joi.string().trim().min(1))
+      .max(10)
+      .optional()
+      .default([]),
   }),
 
-  listBlogs: Joi.object({
+  // Get public blogs validation
+  publicBlogs: Joi.object({
     page: Joi.number().integer().min(1).default(1),
     limit: Joi.number().integer().min(1).max(100).default(20),
     title: Joi.string().trim().optional(),
@@ -60,6 +85,13 @@ const blogValidation = {
       .valid("read_count", "reading_time", "createdAt", "updatedAt")
       .default("createdAt"),
     order: Joi.string().valid("asc", "desc").default("desc"),
+  }),
+
+  // Get author's blogs validation
+  authorBlogs: Joi.object({
+    page: Joi.number().integer().min(1).default(1),
+    limit: Joi.number().integer().min(1).max(100).default(20),
+    state: Joi.string().valid("draft", "published").optional(),
   }),
 };
 

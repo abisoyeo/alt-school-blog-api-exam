@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
 
-  console.log(err);
+  console.log(error);
 
   // Mongoose bad ObjectId
   if (err.name === "CastError") {
@@ -14,8 +14,12 @@ const errorHandler = (err, req, res, next) => {
 
   // Mongoose duplicate key
   if (err.code === 11000) {
-    const message = "Duplicate field value entered";
-    error = new ApiError(400, message);
+    const field = Object.keys(err.keyValue)[0];
+    const value = err.keyValue[field];
+    const message = `${
+      field.charAt(0).toUpperCase() + field.slice(1)
+    } '${value}' already exists`;
+    error = new ApiError(409, message);
   }
 
   // Mongoose validation error

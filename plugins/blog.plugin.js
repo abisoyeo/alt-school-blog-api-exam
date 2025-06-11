@@ -34,10 +34,6 @@ const blogPostPlugin = function (schema) {
       const newReadingTime = calculateReadingTime(update.body);
       this.reading_time = newReadingTime;
       this.set({ reading_time: newReadingTime });
-      console.log(
-        "Plugin: Reading time recalculated for update:",
-        newReadingTime
-      );
     } catch (err) {
       console.error("Plugin: Error in calculateReadingTime for update:", err);
     }

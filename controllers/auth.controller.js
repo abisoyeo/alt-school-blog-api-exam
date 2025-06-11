@@ -1,3 +1,6 @@
+const passport = require("passport");
+const ApiError = require("../utils/api-error.util");
+
 exports.signup = async (req, res, next) => {
   passport.authenticate("signup", { session: false }, (err, user, info) => {
     if (err) {
@@ -5,10 +8,7 @@ exports.signup = async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: info.message || "Registration failed",
-      });
+      return next(new ApiError(400, info.message || "Registration failed"));
     }
 
     const token = user.generateAuthToken();
@@ -34,10 +34,7 @@ exports.login = async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: info.message || "Login failed",
-      });
+      return next(new ApiError(401, info.message || "Login failed"));
     }
 
     const token = user.generateAuthToken();
