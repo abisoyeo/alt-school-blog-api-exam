@@ -13,6 +13,7 @@ router.post(
   useValidatedData,
   authController.signup
 );
+
 router.post(
   "/login",
   validate(authValidation.login),

@@ -3,8 +3,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 const User = require("../models/user.model");
+const ApiError = require("../utils/api-error.util");
 
-// JWT Strategy for protected routes
 passport.use(
   new JWTStrategy(
     {
@@ -25,7 +25,6 @@ passport.use(
   )
 );
 
-// Signup Strategy - Register new users
 passport.use(
   "signup",
   new LocalStrategy(
@@ -37,8 +36,9 @@ passport.use(
     async (req, email, password, done) => {
       try {
         const existingUser = await User.findOne({ email });
+
         if (existingUser) {
-          return done(null, false, { message: "Email already registered" });
+          throw new ApiError(409, "Email already registered");
         }
 
         // Create new user if not exists
@@ -53,7 +53,7 @@ passport.use(
           avatar,
           social_links,
         });
-        return done(null, user, { message: "User created successfully" });
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
@@ -61,7 +61,6 @@ passport.use(
   )
 );
 
-// Login Strategy - Authenticate existing users
 passport.use(
   "login",
   new LocalStrategy(
@@ -73,15 +72,15 @@ passport.use(
       try {
         const user = await User.findOne({ email });
         if (!user) {
-          return done(null, false, { message: "User not found" });
+          throw new ApiError(401, "Invalid email or password");
         }
 
         const isValidPassword = await user.isValidPassword(password);
         if (!isValidPassword) {
-          return done(null, false, { message: "Invalid credentials" });
+          throw new ApiError(401, "Invalid email or password");
         }
 
-        return done(null, user, { message: "Logged in successfully" });
+        return done(null, user);
       } catch (error) {
         return done(error);
       }

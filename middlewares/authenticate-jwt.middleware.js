@@ -1,4 +1,5 @@
 const passport = require("passport");
+const ApiError = require("../utils/api-error.util");
 
 exports.authenticateJWT = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user, info) => {
@@ -7,10 +8,12 @@ exports.authenticateJWT = (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid or expired token. Please Login again.",
-      });
+      return next(
+        new ApiError(
+          401,
+          info?.message || "Invalid or expired token. Please login again."
+        )
+      );
     }
 
     req.user = user;

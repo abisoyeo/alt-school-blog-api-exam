@@ -7,10 +7,6 @@ exports.signup = async (req, res, next) => {
       return next(err);
     }
 
-    if (!user) {
-      return next(new ApiError(400, info.message || "Registration failed"));
-    }
-
     const token = user.generateAuthToken();
 
     res.status(201).json({
@@ -31,10 +27,6 @@ exports.login = async (req, res, next) => {
   passport.authenticate("login", { session: false }, (err, user, info) => {
     if (err) {
       return next(err);
-    }
-
-    if (!user) {
-      return next(new ApiError(401, info.message || "Login failed"));
     }
 
     const token = user.generateAuthToken();

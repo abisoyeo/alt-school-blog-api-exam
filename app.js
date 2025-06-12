@@ -7,15 +7,12 @@ const errorHandler = require("./middlewares/error.middleware");
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(passport.initialize());
 
-// Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/blog", blogRoutes);
+app.use("/api/blogs", blogRoutes);
 
-// Error handling middleware
 app.use(errorHandler);
 
 module.exports = app;

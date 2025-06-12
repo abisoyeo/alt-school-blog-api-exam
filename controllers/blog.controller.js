@@ -7,10 +7,8 @@ const {
   getAllBlogs,
   incrementBlogReadCount,
 } = require("../services/blog.service");
-const { blogValidation } = require("../utils/validator.util");
 const ApiError = require("../utils/api-error.util");
 
-// Create a new blog post
 exports.createBlogPost = async (req, res, next) => {
   try {
     const authorId = req.user._id;
@@ -39,7 +37,6 @@ exports.createBlogPost = async (req, res, next) => {
   }
 };
 
-// Get all blog posts
 exports.getBlogPosts = async (req, res, next) => {
   try {
     const result = await getAllBlogs(req.validated.query);
@@ -54,7 +51,6 @@ exports.getBlogPosts = async (req, res, next) => {
   }
 };
 
-// Get single blog post
 exports.getBlogPost = async (req, res, next) => {
   try {
     const blogId = req.params.id;
@@ -76,7 +72,6 @@ exports.getBlogPost = async (req, res, next) => {
   }
 };
 
-// Get author's blog posts
 exports.getMyBlogPosts = async (req, res, next) => {
   try {
     const authorId = req.user._id;
@@ -95,7 +90,6 @@ exports.getMyBlogPosts = async (req, res, next) => {
   }
 };
 
-// Get single blog post by author
 exports.getMyBlogPost = async (req, res, next) => {
   try {
     const blogId = req.params.id;
@@ -116,7 +110,6 @@ exports.getMyBlogPost = async (req, res, next) => {
   }
 };
 
-// Publish blog post
 exports.publishBlogPost = async (req, res, next) => {
   try {
     const blogId = req.params.id;
@@ -139,14 +132,13 @@ exports.publishBlogPost = async (req, res, next) => {
 
     res.status(200).json({
       message: "Blog published successfully",
-      blog: updatedBlog,
+      data: updatedBlog,
     });
   } catch (error) {
     next(error);
   }
 };
 
-// Update blog post
 exports.updateBlogPost = async (req, res, next) => {
   try {
     const blogId = req.params.id;
@@ -163,13 +155,11 @@ exports.updateBlogPost = async (req, res, next) => {
       throw new ApiError(404, "Blog not found");
     }
 
-    // Process tags if they are being updated
     let tagObjectIds = existingBlog.tags;
     if (tags !== undefined) {
       tagObjectIds = await SaveTags(tags);
     }
 
-    // Prepare the update payload
     const updatePayload = {};
     if (title !== undefined) updatePayload.title = title;
     if (description !== undefined) updatePayload.description = description;
@@ -182,14 +172,13 @@ exports.updateBlogPost = async (req, res, next) => {
 
     res.status(200).json({
       message: "Blog updated successfully",
-      blog: updatedBlog,
+      data: updatedBlog,
     });
   } catch (error) {
     next(error);
   }
 };
 
-// Delete blog post
 exports.deleteBlogPost = async (req, res, next) => {
   try {
     const blogId = req.params.id;

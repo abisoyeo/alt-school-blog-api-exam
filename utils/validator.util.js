@@ -1,21 +1,24 @@
 const Joi = require("joi");
 
 const authValidation = {
-  // User registration validation
   signup: Joi.object({
     first_name: Joi.string().required().messages({
       "any.required": "First Name is required",
+      "string.empty": "First Name cannot be empty",
     }),
     last_name: Joi.string().required().messages({
       "any.required": "Last Name is required",
+      "string.empty": "Last Name cannot be empty",
     }),
     email: Joi.string().email().required().messages({
       "string.email": "Please provide a valid email address",
       "any.required": "Email is required",
+      "string.empty": "Email cannot be empty",
     }),
     password: Joi.string().min(6).required().messages({
       "string.min": "Password must be at least 6 characters long",
       "any.required": "Password is required",
+      "string.empty": "Password cannot be empty",
     }),
     bio: Joi.string().max(500).trim().optional().messages({
       "string.max": "Bio cannot exceed 500 characters",
@@ -31,27 +34,29 @@ const authValidation = {
     }).optional(),
   }),
 
-  // User login validation
   login: Joi.object({
     email: Joi.string().email().required().messages({
       "string.email": "Please provide a valid email address",
       "any.required": "Email is required",
+      "string.empty": "Email cannot be empty",
     }),
     password: Joi.string().required().messages({
       "any.required": "Password is required",
+      "string.empty": "Password cannot be empty",
     }),
   }),
 };
 
 const blogValidation = {
-  // Create blog validation
   createBlog: Joi.object({
     title: Joi.string().required().messages({
       "any.required": "Title is required",
+      "string.empty": "Title cannot be empty",
     }),
     description: Joi.string().optional(),
     body: Joi.string().required().messages({
       "any.required": "Body is required",
+      "string.empty": "Body cannot be empty",
     }),
     state: Joi.string().valid("draft", "published").optional().default("draft"),
     tags: Joi.array()
@@ -61,7 +66,6 @@ const blogValidation = {
       .default([]),
   }),
 
-  // Update blog validation
   updateBlog: Joi.object({
     title: Joi.string().optional(),
     description: Joi.string().optional(),
@@ -74,7 +78,6 @@ const blogValidation = {
       .default([]),
   }),
 
-  // Get public blogs validation
   publicBlogs: Joi.object({
     page: Joi.number().integer().min(1).default(1),
     limit: Joi.number().integer().min(1).max(100).default(20),
@@ -87,7 +90,6 @@ const blogValidation = {
     order: Joi.string().valid("asc", "desc").default("desc"),
   }),
 
-  // Get author's blogs validation
   authorBlogs: Joi.object({
     page: Joi.number().integer().min(1).default(1),
     limit: Joi.number().integer().min(1).max(100).default(20),

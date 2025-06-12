@@ -1,7 +1,6 @@
 const { calculateReadingTime } = require("../utils/reading-time.util");
 
 const blogPostPlugin = function (schema) {
-  // Pre-save hook to populate tags and author
   schema.pre(/^find/, function (next) {
     this.populate({
       path: "tags",
@@ -16,7 +15,6 @@ const blogPostPlugin = function (schema) {
     next();
   });
 
-  // Pre-save hook to set reading time
   schema.pre("save", function (next) {
     try {
       this.reading_time = calculateReadingTime(this.body);
@@ -27,7 +25,6 @@ const blogPostPlugin = function (schema) {
     }
   });
 
-  // Pre-update hook to recalculate reading time
   schema.pre("findOneAndUpdate", function (next) {
     const update = this.getUpdate();
     try {

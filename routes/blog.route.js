@@ -8,7 +8,6 @@ const { blogValidation } = require("../utils/validator.util");
 
 const router = express.Router();
 
-// Protected route
 router.get(
   "/me",
   authenticateJWT,
@@ -17,7 +16,6 @@ router.get(
 );
 router.get("/me/:id", authenticateJWT, blogController.getMyBlogPost);
 
-// Public routes
 router.get(
   "/",
   validate(blogValidation.publicBlogs, "query"),
@@ -25,14 +23,14 @@ router.get(
 );
 router.get("/:id", blogController.getBlogPost);
 
-// Protected routes
 router.use(authenticateJWT);
+
 router.post(
   "/",
   validate(blogValidation.createBlog),
   blogController.createBlogPost
 );
-router.put("/:id/publish", blogController.publishBlogPost);
+router.patch("/:id/publish", blogController.publishBlogPost);
 router.put(
   "/:id",
   validate(blogValidation.updateBlog),
