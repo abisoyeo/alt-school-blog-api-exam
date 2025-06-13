@@ -27,15 +27,21 @@ _Developed as part of AltSchool Backend Engineering curriculum._
 - Sort by read count, reading time, or timestamp
 - Public access to published content
 
-## Quick Start
+### Try the Live API
 
-### Prerequisites
+The API is deployed and publicly accessible.
 
-- Node.js (v14 or higher)
-- MongoDB instance
-- npm or yarn
+**Base URL:** [`https://abisoye-alt-school-blog-api-exam.onrender.com/api`](https://abisoye-alt-school-blog-api-exam.onrender.com/api)
 
-### Installation
+You can test the endpoints using:
+
+- **[Postman Documentation](https://documenter.getpostman.com/view/23219595/2sB2x6mrsi)**
+- **Any HTTP client (Thunder Client, curl, etc.)**
+
+
+### Local Development (Optional)
+
+If you want to run the API locally:
 
 ```bash
 git clone https://github.com/abisoyeo/alt-school-blog-api-exam.git
@@ -60,9 +66,6 @@ NODE_ENV=development
 # Development
 npm run dev
 
-# Production
-npm start
-
 # Run tests
 npm test
 ```
@@ -86,9 +89,9 @@ GET  /blogs/:id      # Get single blog (increments read count)
 ### Protected Endpoints
 
 ```
-POST   /blogs/me        # Create new blog (draft)
 GET    /blogs/me   # Get user's blogs (paginated, filterable)
 GET    /blogs/me/:id   # Get single user blog
+POST   /blogs/me        # Create new blog (draft)
 PUT    /blogs/me/:id    # Update blog
 PATCH  /blogs/me/:id/publish  # Publish draft
 DELETE /blogs/me/:id    # Delete blog
