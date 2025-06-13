@@ -1,3 +1,5 @@
+[![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](#) ![Express.js](https://img.shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB) ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green) ![License](https://img.shields.io/badge/license-MIT-blue)
+
 # Blogging API
 
 A robust RESTful API for blog management built with Node.js, Express, and MongoDB. Features JWT authentication, content state management, and comprehensive search capabilities.
@@ -6,20 +8,20 @@ _Developed as part of AltSchool Backend Engineering curriculum._
 
 ## Features
 
-**Authentication & Authorization**
+### Authentication & Authorization
 
 - JWT-based authentication with 1-hour token expiry
 - User registration and login endpoints
 - Protected routes for content management
 
-**Content Management**
+### Content Management
 
 - Draft and publish workflow for articles
 - Full CRUD operations for blog owners
 - Auto-calculated reading time
 - Read count tracking
 
-**Public API**
+### Public API
 
 - Paginated blog listings with search and filtering
 - Sort by read count, reading time, or timestamp
@@ -67,7 +69,7 @@ npm test
 
 ## API Documentation
 
-### Authentication
+### Authentication Endpoints
 
 ```
 POST /auth/signup    # User registration
@@ -84,67 +86,55 @@ GET  /blogs/:id      # Get single blog (increments read count)
 ### Protected Endpoints
 
 ```
-POST   /blogs        # Create new blog (draft)
-GET    /user/blogs   # Get user's blogs (paginated, filterable)
-PUT    /blogs/:id    # Update blog
-PATCH  /blogs/:id/publish  # Publish draft
-DELETE /blogs/:id    # Delete blog
+POST   /blogs/me        # Create new blog (draft)
+GET    /blogs/me   # Get user's blogs (paginated, filterable)
+GET    /blogs/me/:id   # Get single user blog
+PUT    /blogs/me/:id    # Update blog
+PATCH  /blogs/me/:id/publish  # Publish draft
+DELETE /blogs/me/:id    # Delete blog
 ```
 
-### Query Parameters
+### Complete API Documentation
 
-**GET /blogs**
+**[View Full API Documentation](https://documenter.getpostman.com/view/23219595/2sB2x6mrsi)**
 
-- `page` - Page number (default: 1)
-- `limit` - Items per page (default: 20)
-- `search` - Search in title, author, tags
-- `sort` - Sort by: read_count, reading_time, timestamp
-- `order` - asc or desc
+The complete API documentation includes:
 
-**GET /user/blogs**
-
-- `state` - Filter by draft or published
-- `page`, `limit` - Pagination
+- Detailed request/response examples
+- Authentication flows
+- Error handling scenarios
+- Sample data for testing
+- Postman collection for easy testing
 
 ## Data Models
 
 ### User
 
-```
-email: String (required, unique)
-first_name: String (required)
-last_name: String (required)
-password: String (required, hashed)
+```javascript
+email: String(required, unique);
+first_name: String(required);
+last_name: String(required);
+password: String(required, hashed);
 ```
 
 ### Blog
 
-```
+```javascript
 title: String (required, unique)
 description: String
 author: ObjectId (User reference)
 state: Enum ['draft', 'published']
 read_count: Number (default: 0)
 reading_time: Number (auto-calculated)
-tags: [String]
+tags: [ObjectId]
 body: String (required)
 createdAt: Date
 updatedAt: Date
 ```
 
-## Architecture
+### Entity Relationship Diagram
 
-Built using MVC pattern:
-
-```
-├── controllers/     # Request handlers
-├── models/         # Database schemas
-├── routes/         # API routes
-├── middleware/     # Custom middleware
-├── utils/          # Helper functions
-├── tests/          # Test suites
-└── config/         # Configuration files
-```
+**[View Database ERD](https://drawsql.app/teams/-4258/diagrams/abisoye-blogapierd-exam)**
 
 ## Testing
 
@@ -163,8 +153,17 @@ npm run test:coverage
 - **Database:** MongoDB with Mongoose ODM
 - **Authentication:** JWT
 - **Testing:** Jest & Supertest
-- **Validation:** Joi
 
----
+## Project Context
 
-**Project Context:** This API was developed as a comprehensive backend engineering assessment, demonstrating proficiency in Node.js ecosystem, REST API design, authentication patterns, and database modeling.
+This API was developed as a comprehensive backend engineering assessment, demonstrating proficiency in Node.js ecosystem, REST API design, authentication patterns, and database modeling.
+
+## Links
+
+- [API](https://abisoye-alt-school-blog-api-exam.onrender.com/api/blogs)
+- [Complete API Documentation](https://documenter.getpostman.com/view/23219595/2sB2x6mrsi)
+- [Database ERD](https://drawsql.app/teams/-4258/diagrams/abisoye-blogapierd-exam)
+
+## License
+
+This project is licensed under the MIT License.

@@ -26,16 +26,16 @@ router.get("/:id", blogController.getBlogPost);
 router.use(authenticateJWT);
 
 router.post(
-  "/",
+  "/me",
   validate(blogValidation.createBlog),
   blogController.createBlogPost
 );
-router.patch("/:id/publish", blogController.publishBlogPost);
+router.patch("/me/:id/publish", blogController.publishBlogPost);
 router.put(
   "/:id",
   validate(blogValidation.updateBlog),
   blogController.updateBlogPost
 );
-router.delete("/:id", blogController.deleteBlogPost);
+router.delete("/me/:id", blogController.deleteBlogPost);
 
 module.exports = router;

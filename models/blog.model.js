@@ -51,7 +51,6 @@ blogSchema.index({ tags: 1 });
 blogSchema.index({ read_count: -1 });
 blogSchema.index({ reading_time: 1 });
 blogSchema.index({ createdAt: -1 });
-blogSchema.index({ updatedAt: -1 });
 
 blogSchema.plugin(blogPostPlugin);
 
