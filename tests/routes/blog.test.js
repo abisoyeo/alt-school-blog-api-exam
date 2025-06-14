@@ -271,7 +271,7 @@ describe("Blog Controller", () => {
       };
 
       const response = await request(app)
-        .post("/api/blogs")
+        .post("/api/blogs/me")
         .set("Authorization", `Bearer ${authToken}`)
         .send(newBlog);
 
@@ -292,7 +292,7 @@ describe("Blog Controller", () => {
       };
 
       const response = await request(app)
-        .post("/api/blogs")
+        .post("/api/blogs/me")
         .set("Authorization", `Bearer ${authToken}`)
         .send(newBlog);
 
@@ -320,7 +320,7 @@ describe("Blog Controller", () => {
       };
 
       const response = await request(app)
-        .put(`/api/blogs/${blogId[0]._id}`)
+        .put(`/api/blogs/me/${blogId[0]._id}`)
         .set("Authorization", `Bearer ${authToken}`)
         .send(updatedBlog);
 
@@ -333,7 +333,7 @@ describe("Blog Controller", () => {
 
     it("Should publish own blog", async () => {
       const response = await request(app)
-        .patch(`/api/blogs/${blogId[2]._id}/publish`)
+        .patch(`/api/blogs/me/${blogId[2]._id}/publish`)
         .set("Authorization", `Bearer ${authToken}`);
 
       expect(response.statusCode).toBe(200);
@@ -343,7 +343,7 @@ describe("Blog Controller", () => {
 
     it("Should delete author blog", async () => {
       const response = await request(app)
-        .delete(`/api/blogs/${blogId[0]._id}`)
+        .delete(`/api/blogs/me/${blogId[0]._id}`)
         .set("Authorization", `Bearer ${authToken}`);
 
       expect(response.statusCode).toBe(200);
@@ -380,7 +380,7 @@ describe("Blog Controller", () => {
       };
 
       const response = await request(app)
-        .put(`/api/blogs/${otherUserBlog._id}`)
+        .put(`/api/blogs/me/${otherUserBlog._id}`)
         .set("Authorization", `Bearer ${authToken}`)
         .send(updatedBlog);
 

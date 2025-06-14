@@ -32,7 +32,7 @@ router.post(
 );
 router.patch("/me/:id/publish", blogController.publishBlogPost);
 router.put(
-  "/:id",
+  "/me/:id",
   validate(blogValidation.updateBlog),
   blogController.updateBlogPost
 );
