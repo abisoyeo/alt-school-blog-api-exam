@@ -2,61 +2,6 @@ const request = require("supertest");
 const app = require("../../app");
 const User = require("../../models/user.model");
 
-// const mongoose = require("mongoose");
-// describe("DB Test Run", () => {
-//   test("Database connection is established", async () => {
-//     expect(mongoose.connection.readyState).toBe(1); // 1 means connected
-//   });
-//   test("User model is defined", () => {
-//     expect(User).toBeDefined();
-//   });
-//   test("User model has a username field", () => {
-//     const user = new User({
-//       first_name: "test",
-//       last_name: "user",
-//       email: "testuser@test.com",
-//       password: "testpass",
-//     });
-//     expect(user.email).toBeDefined();
-//   });
-//   test("User model can save a user", async () => {
-//     const user = new User({
-//       first_name: "test",
-//       last_name: "user",
-//       email: "testuser@test.com",
-//       password: "testpass",
-//     });
-//     await user.save();
-//     const foundUser = await User.findOne({ email: "testuser@test.com" });
-//     expect(foundUser).toBeDefined();
-//     expect(foundUser.email).toBe("testuser@test.com");
-//     console.log("Users count after saving:", await User.countDocuments());
-//   });
-
-//   // --- Crucial Test to Prove Clearing ---
-//   test("Database is cleared after previous test", async () => {
-//     // This test runs AFTER the `afterEach` from the previous test has executed.
-//     // Therefore, there should be no users.
-//     const userCount = await User.countDocuments();
-//     expect(userCount).toBe(0);
-//     console.log("User count in 'Database is cleared' test:", userCount); // Should be 0
-//   });
-
-//   test("Another user can be saved in a clean state", async () => {
-//     // This test confirms that after clearing, you can save new data
-//     const user = new User({
-//       first_name: "new",
-//       last_name: "user",
-//       email: "newuser@test.com",
-//       password: "newpass",
-//     });
-//     await user.save();
-//     const foundUser = await User.findOne({ email: "newuser@test.com" });
-//     expect(foundUser).toBeDefined();
-//     expect(foundUser.email).toBe("newuser@test.com");
-//   });
-// });
-
 describe("User Authentication", () => {
   describe("POST /signup", () => {
     beforeEach(async () => {

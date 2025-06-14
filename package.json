@@ -1,39 +1,33 @@
 {
-  "name": "blogapiapp",
-  "version": "1.0.0",
-  "description": "A RESTful Blog API server built with Express.js and MongoDB for an AltSchool Africa exam project. Features include JWT-based user authentication, blog creation, filtering, and publishing.",
-  "main": "server.js",
-  "scripts": {
-    "test": "jest",
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "keywords": [
-    "blog",
-    "jwt",
-    "rest",
-    "api",
-    "mongodb",
-    "altschool",
-    "nodejs"
-  ],
-  "author": "Abisoye Ogunmona",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "joi": "^17.13.3",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb-memory-server": "^10.1.4",
-    "mongoose": "^8.15.1",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0",
-    "nodemon": "^3.1.10",
-    "supertest": "^7.1.1"
-  }
+    "name": "blogging-app",
+    "version": "1.0.0",
+    "description": "Blogging API with React client - monorepo structure",
+    "scripts": {
+        "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+        "test": "cd server && npm test",
+        "test:watch": "cd server && npm run test:watch",
+        "server:dev": "cd server && npm run dev",
+        "server:start": "cd server && npm start",
+        "client:dev": "cd client && npm run dev",
+        "client:build": "cd client && npm run build",
+        "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+        "install:server": "cd server && npm install",
+        "install:client": "cd client && npm install"
+    },
+    "devDependencies": {
+        "concurrently": "^7.6.0"
+    },
+    "workspaces": [
+        "server",
+        "client"
+    ],
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/abisoyeo/alt-school-blog-api-exam.git"
+    },
+    "author": "Abisoye",
+    "license": "MIT"
 }
