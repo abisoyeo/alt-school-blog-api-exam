@@ -22,6 +22,11 @@ const blogSchema = new mongoose.Schema(
         ref: "Tag",
       },
     ],
+    image: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dob7udjfx/image/upload/v1750009867/Screenshot_2025-06-15_184949_baw8ku.png",
+    },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

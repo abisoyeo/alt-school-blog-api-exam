@@ -5,6 +5,7 @@ const {
 } = require("../middlewares/authenticate-jwt.middleware");
 const { validate } = require("../middlewares/validate.middleware");
 const { blogValidation } = require("../utils/validator.util");
+const uploadMiddleware = require("../middlewares/cloudinary-upload.middleware");
 
 const router = express.Router();
 
@@ -27,12 +28,14 @@ router.use(authenticateJWT);
 
 router.post(
   "/me",
+  uploadMiddleware.single("file"),
   validate(blogValidation.createBlog),
   blogController.createBlogPost
 );
 router.patch("/me/:id/publish", blogController.publishBlogPost);
 router.put(
   "/me/:id",
+  uploadMiddleware.single("file"),
   validate(blogValidation.updateBlog),
   blogController.updateBlogPost
 );

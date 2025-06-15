@@ -16,11 +16,14 @@ exports.createBlogPost = async (req, res, next) => {
 
     const tagObjectIds = await SaveTags(tags);
 
+    const imageUrl = req.file?.path;
+
     const blogData = {
       title,
       description,
       body,
       tags: tagObjectIds,
+      image: imageUrl,
       author: authorId,
       state: "draft",
       read_count: 0,
@@ -155,6 +158,11 @@ exports.updateBlogPost = async (req, res, next) => {
       throw new ApiError(404, "Blog not found");
     }
 
+    let imageUrl = existingBlog.image;
+    if (req.file) {
+      imageUrl = req.file?.path;
+    }
+
     let tagObjectIds = existingBlog.tags;
     if (tags !== undefined) {
       tagObjectIds = await SaveTags(tags);
@@ -164,6 +172,7 @@ exports.updateBlogPost = async (req, res, next) => {
     if (title !== undefined) updatePayload.title = title;
     if (description !== undefined) updatePayload.description = description;
     if (body !== undefined) updatePayload.body = body;
+    if (imageUrl !== existingBlog.image) updatePayload.image = imageUrl;
     if (state !== undefined) updatePayload.state = state;
     if (tagObjectIds !== existingBlog.tags) updatePayload.tags = tagObjectIds;
     updatePayload.updatedAt = new Date();
