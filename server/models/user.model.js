@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    refresh_token: { type: String },
     bio: {
       type: String,
       maxLength: 250,

@@ -16,6 +16,16 @@ const userAuthPlugin = function (schema) {
     );
   };
 
+  schema.methods.generateRefreshToken = function () {
+    return jwt.sign(
+      { user: { id: this._id } },
+      process.env.JWT_REFRESH_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+  };
+
   schema.methods.isValidPassword = async function (userPassword) {
     return bcrypt.compare(userPassword, this.password);
   };

@@ -45,6 +45,29 @@ const authValidation = {
       "string.empty": "Password cannot be empty",
     }),
   }),
+
+  updateProfile: Joi.object({
+    first_name: Joi.string().optional(),
+    last_name: Joi.string().optional(),
+    email: Joi.string().email().optional().messages({
+      "string.email": "Please provide a valid email address",
+    }),
+    password: Joi.string().min(6).optional().messages({
+      "string.min": "Password must be at least 6 characters long",
+    }),
+    bio: Joi.string().max(500).trim().optional().messages({
+      "string.max": "Bio cannot exceed 500 characters",
+    }),
+    avatar: Joi.string().uri().optional().messages({
+      "string.uri": "Avatar must be a valid URL",
+    }),
+    social_links: Joi.object({
+      twitter: Joi.string().optional().allow(""),
+      linkedin: Joi.string().optional().allow(""),
+      github: Joi.string().optional().allow(""),
+      website: Joi.string().uri().optional().allow(""),
+    }).optional(),
+  }),
 };
 
 const blogValidation = {
@@ -64,6 +87,13 @@ const blogValidation = {
       .max(10)
       .optional()
       .default([]),
+    file: Joi.string()
+      .pattern(/\.(jpg|jpeg|png|gif|webp)$/i)
+      .optional()
+      .messages({
+        "string.pattern.base":
+          "Image must be a valid image file (jpg, jpeg, png, gif, webp)",
+      }),
   }),
 
   updateBlog: Joi.object({

@@ -5,24 +5,25 @@ const ExtractJWT = require("passport-jwt").ExtractJwt;
 const User = require("../models/user.model");
 const ApiError = require("../utils/api-error.util");
 
+const opts = {
+  secretOrKey: process.env.JWT_SECRET,
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+};
+
 passport.use(
-  new JWTStrategy(
-    {
-      secretOrKey: process.env.JWT_SECRET,
-      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    },
-    async (jwtPayload, done) => {
-      try {
-        const user = await User.findById(jwtPayload.user.id);
-        if (user) {
-          return done(null, user);
-        }
-        return done(null, false);
-      } catch (error) {
-        return done(error);
+  new JWTStrategy(opts, async (jwtPayload, done) => {
+    try {
+      const user = await User.findById(jwtPayload.user.id).select(
+        "-password -refresh_token"
+      );
+      if (user) {
+        return done(null, user);
       }
+      return done(null, false);
+    } catch (error) {
+      return done(error);
     }
-  )
+  })
 );
 
 passport.use(
