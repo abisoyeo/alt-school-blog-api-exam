@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
 // Serve static frontend build
-const distPath = path.resolve(__dirname, "/client/dist");
+const distPath = path.resolve(__dirname, "../client/dist");
 
 app.use(express.static(distPath));
 
