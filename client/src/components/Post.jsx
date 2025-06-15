@@ -1,30 +1,33 @@
-// import { formatISO9075 } from "date-fns";
-// import { Link } from "react-router-dom";
+import { formatISO9075, format } from "date-fns";
+import { Link } from "react-router-dom";
 
-export default function Post() {
+export default function Post({
+  _id,
+  title,
+  description,
+  image,
+  createdAt,
+  author,
+}) {
   return (
     <div className="post">
       <div className="image">
-        <img src="https://images.unsplash.com/photo-1546074177-ffdda98d214f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+        <Link to={`/post/${_id}`}>
+          <img src={image} alt="" />
+        </Link>
       </div>
       <div className="texts">
-        <h2>Lorem ipsum, dolor sit amet consectetur adipisicing.</h2>
+        <Link to={`/post/${_id}`}>
+          <h2>{title}</h2>
+        </Link>
+
         <p className="info">
-          <a className="author">David Bowers</a>
-          <time>2024-01-06 16:45</time>
+          <a className="author">
+            {author.first_name} {author.last_name}
+          </a>
+          <time>{format(new Date(createdAt), "MMMM d, yyyy h:mm a")}</time>
         </p>
-        <p className="summary">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
-          assumenda natus fugit eius et nemo eveniet odio, id porro autem.
-          Necessitatibus reiciendis vel exercitationem odio excepturi expedita,
-          officiis at nihil? Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Labore adipisci rerum magni, incidunt consectetur accusamus
-          aliquid illo, assumenda magnam natus doloremque error vitae. Eius,
-          possimus!lorem25 Lorem ipsum dolor sit, amet consectetur adipisicing
-          elit. Voluptatibus voluptate eum, unde saepe mollitia quibusdam
-          aliquid? Recusandae totam exercitationem eaque enim dolore similique
-          dolorum ipsum?
-        </p>
+        <p className="summary">{description}</p>
       </div>
     </div>
   );

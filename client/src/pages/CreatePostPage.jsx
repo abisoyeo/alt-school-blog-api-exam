@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import Editor from "../components/Editor";
 
 export default function CreatePost() {
+  const token = localStorage.getItem("token");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [body, setBody] = useState("");
@@ -13,21 +14,33 @@ export default function CreatePost() {
   const [redirect, setRedirect] = useState(false);
 
   async function createNewPost(ev) {
-    const data = new FormData();
-    data.set("title", title);
-    data.set("description", description);
-    data.set("body", body);
-    data.set("tags", tags);
-    data.set("file", files[0]);
     ev.preventDefault();
+    try {
+      const data = new FormData();
+      data.set("title", title);
+      data.set("description", description);
+      data.set("body", body);
+      data.set("file", files[0]);
 
-    const response = await fetch("http://localhost:3000/blogs", {
-      method: "POST",
-      body: data,
-      credentials: "include",
-    });
-    if (response.ok) {
-      setRedirect(true);
+      const tagArray = tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0);
+      tagArray.forEach((tag) => data.append("tags[]", tag));
+
+      const response = await fetch("http://localhost:3000/api/blogs/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: "POST",
+        body: data,
+        credentials: "include",
+      });
+      if (response.ok) {
+        setRedirect(true);
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -38,13 +51,13 @@ export default function CreatePost() {
     <form onSubmit={createNewPost}>
       <input
         type="title"
-        placeholder={"Title"}
+        placeholder={"Title (Required)"}
         value={title}
         onChange={(ev) => setTitle(ev.target.value)}
       />
       <input
         type="description"
-        placeholder={"Description"}
+        placeholder={"Description (Required)"}
         value={description}
         onChange={(ev) => setDescription(ev.target.value)}
       />
@@ -54,9 +67,18 @@ export default function CreatePost() {
         value={tags}
         onChange={(ev) => setTags(ev.target.value)}
       />
-      <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
+      <span style={{ fontSize: "0.7em", color: "gray" }}>
+        Only image files (jpg, jpeg, png, webp). Max size: 5MB.
+      </span>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(ev) => setFiles(ev.target.files)}
+      />
       <Editor value={body} onChange={setBody} />
-      <button style={{ marginTop: "5px" }}>Create post</button>
+      <button style={{ marginTop: "5px" }} type="submit">
+        Create post
+      </button>
     </form>
   );
 }
