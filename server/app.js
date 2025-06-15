@@ -37,8 +37,7 @@ app.use((req, res, next) => {
   next(new ApiError(404, `Cannot ${req.method} ${req.originalUrl}`));
 });
 
-app.use((req, res, next) => {
-  if (req.path.startsWith("/api")) return next();
+app.use("*", (req, res, next) => {
   res.sendFile(path.resolve(distPath, "index.html"));
 });
 
