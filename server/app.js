@@ -33,7 +33,7 @@ app.use(express.static(distPath));
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 
-app.use((req, res, next) => {
+app.use("/api/*", (req, res, next) => {
   next(new ApiError(404, `Cannot ${req.method} ${req.originalUrl}`));
 });
 
