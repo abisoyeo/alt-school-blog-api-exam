@@ -17,10 +17,6 @@
     "devDependencies": {
         "concurrently": "^7.6.0"
     },
-    "workspaces": [
-        "server",
-        "client"
-    ],
     "engines": {
         "node": ">=14.0.0"
     },
