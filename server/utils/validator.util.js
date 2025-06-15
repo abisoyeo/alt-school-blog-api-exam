@@ -87,13 +87,6 @@ const blogValidation = {
       .max(10)
       .optional()
       .default([]),
-    file: Joi.string()
-      .pattern(/\.(jpg|jpeg|png|gif|webp)$/i)
-      .optional()
-      .messages({
-        "string.pattern.base":
-          "Image must be a valid image file (jpg, jpeg, png, gif, webp)",
-      }),
   }),
 
   updateBlog: Joi.object({
