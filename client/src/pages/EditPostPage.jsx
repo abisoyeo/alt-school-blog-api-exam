@@ -14,7 +14,7 @@ export default function EditPost() {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/blogs/${id}`, {
+    fetch(`/api/blogs/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -25,7 +25,6 @@ export default function EditPost() {
         setTitle(postInfo.data.title);
         setDescription(postInfo.data.description);
         setBody(postInfo.data.body);
-        // console.log(postInfo.data.tags.map((tag) => tag.name).toString());
         setTags(postInfo.data.tags.map((tag) => tag.name).toString());
       });
     });
@@ -46,7 +45,7 @@ export default function EditPost() {
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
     tagArray.forEach((tag) => data.append("tags[]", tag));
-    const response = await fetch(`http://localhost:3000/api/blogs/me/${id}`, {
+    const response = await fetch(`/api/blogs/me/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

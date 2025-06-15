@@ -1,4 +1,3 @@
-import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
@@ -28,7 +27,7 @@ export default function CreatePost() {
         .filter((t) => t.length > 0);
       tagArray.forEach((tag) => data.append("tags[]", tag));
 
-      const response = await fetch("http://localhost:3000/api/blogs/me", {
+      const response = await fetch("/api/blogs/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

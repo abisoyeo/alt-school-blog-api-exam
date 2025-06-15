@@ -11,7 +11,7 @@ export default function PostPage() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/blogs/${id}`, {
+    fetch(`/api/blogs/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

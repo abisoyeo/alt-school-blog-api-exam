@@ -11,16 +11,13 @@ export default function IndexPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/blogs?page=${page}&limit=5`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            method: "GET",
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`/api/blogs?page=${page}&limit=5`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          method: "GET",
+          credentials: "include",
+        });
 
         if (response.ok) {
           const result = await response.json();

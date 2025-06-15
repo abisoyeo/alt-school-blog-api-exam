@@ -13,7 +13,7 @@ export default function Header() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch("http://localhost:3000/api/auth/logout", {
+    await fetch("/api/auth/logout", {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
