@@ -42,7 +42,6 @@ passport.use(
           throw new ApiError(409, "Email already registered");
         }
 
-        // Create new user if not exists
         const { first_name, last_name, bio, avatar, social_links } = req.body;
 
         const user = await User.create({

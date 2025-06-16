@@ -20,7 +20,6 @@ const blogPostPlugin = function (schema) {
       this.reading_time = calculateReadingTime(this.body);
       next();
     } catch (err) {
-      console.error("Plugin: Error in calculateReadingTime:", err);
       next(err);
     }
   });
@@ -32,7 +31,7 @@ const blogPostPlugin = function (schema) {
       this.reading_time = newReadingTime;
       this.set({ reading_time: newReadingTime });
     } catch (err) {
-      console.error("Plugin: Error in calculateReadingTime for update:", err);
+      next(err);
     }
 
     next();

@@ -24,20 +24,21 @@ router.post(
   authController.login
 );
 
-router.post("/refresh-token", authenticateJWT, authController.refreshToken);
+router.use(authenticateJWT);
 
-router.post("/logout", authenticateJWT, authController.logout);
+router.post("/refresh-token", authController.refreshToken);
 
-router.get("/profile", authenticateJWT, authController.getProfile);
+router.post("/logout", authController.logout);
+
+router.get("/profile", authController.getProfile);
 
 router.put(
   "/profile",
-  authenticateJWT,
   validate(authValidation.updateProfile),
   useValidatedData,
   authController.updateProfile
 );
 
-router.delete("/profile", authenticateJWT, authController.deleteAccount);
+router.delete("/profile", authController.deleteAccount);
 
 module.exports = router;

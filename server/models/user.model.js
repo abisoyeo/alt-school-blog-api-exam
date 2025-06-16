@@ -32,7 +32,8 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: "https://example.com/default-avatar.png",
+      default:
+        "https://res.cloudinary.com/dob7udjfx/image/upload/v1750088803/Screenshot_2025-06-16_164528_mxt6ir.png",
     },
     social_links: {
       twitter: String,
