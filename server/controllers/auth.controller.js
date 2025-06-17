@@ -7,35 +7,39 @@ exports.signup = async (req, res, next) => {
   passport.authenticate(
     "signup",
     { session: false },
-    async (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
+    async (error, user, info) => {
+      try {
+        if (error) {
+          return next(new ApiError(500, "Signup failed", error, false));
+        }
 
-      const token = user.generateAuthToken();
-      const refreshToken = user.generateRefreshToken();
+        const token = user.generateAuthToken();
+        const refreshToken = user.generateRefreshToken();
 
-      user.refresh_token = refreshToken;
-      await user.save();
+        user.refresh_token = refreshToken;
+        await user.save();
 
-      res
-        .cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 7 * 24 * 60 * 60 * 1000,
-        })
-        .status(201)
-        .json({
-          success: true,
-          message: "User registered successfully",
-          data: {
-            user: {
-              id: user._id,
-              email: user.email,
+        res
+          .cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          })
+          .status(201)
+          .json({
+            success: true,
+            message: "User registered successfully",
+            data: {
+              user: {
+                id: user._id,
+                email: user.email,
+              },
+              token,
             },
-            token,
-          },
-        });
+          });
+      } catch (error) {
+        next(new ApiError(500, "Signup failed", error, false));
+      }
     }
   )(req, res, next);
 };
@@ -44,34 +48,39 @@ exports.login = async (req, res, next) => {
   passport.authenticate(
     "login",
     { session: false },
-    async (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
+    async (error, user, info) => {
+      try {
+        if (error) {
+          return next(new ApiError(500, "Authentication failed", error, false));
+        }
 
-      const token = user.generateAuthToken();
-      const refreshToken = user.generateRefreshToken();
+        const token = user.generateAuthToken();
+        const refreshToken = user.generateRefreshToken();
 
-      user.refresh_token = refreshToken;
-      await user.save();
+        user.refresh_token = refreshToken;
+        await user.save();
 
-      res
-        .cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 7 * 24 * 60 * 60 * 1000,
-        })
-        .json({
-          success: true,
-          message: "Login successful",
-          data: {
-            user: {
-              id: user._id,
-              email: user.email,
+        res
+          .cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          })
+          .json({
+            success: true,
+            message: "Login successful",
+            data: {
+              user: {
+                id: user._id,
+                email: user.email,
+                first_name: user.first_name,
+              },
+              token,
             },
-            token,
-          },
-        });
+          });
+      } catch (error) {
+        next(new ApiError(500, "Login failed", error, false));
+      }
     }
   )(req, res, next);
 };
@@ -134,10 +143,6 @@ exports.refreshToken = async (req, res, next) => {
         success: true,
         message: "Token refreshed successfully",
         data: {
-          user: {
-            id: user._id,
-            email: user.email,
-          },
           token: newAccessToken,
         },
       });
@@ -149,11 +154,17 @@ exports.refreshToken = async (req, res, next) => {
 };
 
 exports.getProfile = (req, res) => {
+  const userObj = req.user.toJSON();
+  const { _id, ...rest } = userObj;
+
   res.json({
     success: true,
     message: "User profile retrieved successfully",
     data: {
-      user: req.user,
+      user: {
+        id: _id,
+        ...rest,
+      },
     },
   });
 };
