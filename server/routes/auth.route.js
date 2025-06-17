@@ -24,9 +24,9 @@ router.post(
   authController.login
 );
 
-router.use(authenticateJWT);
-
 router.post("/refresh-token", authController.refreshToken);
+
+router.use(authenticateJWT);
 
 router.post("/logout", authController.logout);
 

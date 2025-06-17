@@ -3,35 +3,13 @@ import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 export default function Header() {
-  const { userInfo, setUserInfo } = useContext(UserContext);
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    // this is where u try the refresh for token and setuserinfo on refresh of dom
-
-    setUserInfo(userInfo);
-  }, []);
+  const { userInfo, logout } = useContext(UserContext);
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      credentials: "include",
-    })
-      .then((response) => {
-        if (response.ok) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          setUserInfo(null);
-        }
-      })
-      .catch((error) => console.error("Logout  err:", error));
+    await logout();
   };
 
-  const username = userInfo?.email;
+  const username = userInfo?.first_name;
 
   return (
     <header>
@@ -42,6 +20,7 @@ export default function Header() {
         {username && (
           <>
             <Link to="/create">Create new post</Link>
+            <Link to="/author-posts">View Your Blogs</Link>
             <a onClick={handleLogout}>Logout ({username})</a>
           </>
         )}

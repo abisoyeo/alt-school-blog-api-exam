@@ -16,11 +16,18 @@ main {
   margin: 0 auto;
 }
 header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 0;
   margin-bottom: 50px;
   align-items: center;
+  padding: 15px 5px;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
 }
 header a {
   text-decoration: none;
@@ -39,6 +46,7 @@ div.post {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
+  padding: 0px 10px;
   margin-bottom: 30px;
 }
 @media screen and (min-width: 700px) {
@@ -71,7 +79,7 @@ div.post p.summary {
   line-height: 1.8rem;
 }
 .form-group {
-  margin: 20vh auto;
+  margin: 15vh auto;
 }
 form.login,
 form.register {
@@ -99,6 +107,11 @@ button {
   color: #fff;
   border-radius: 5px;
   padding: 7px 0;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 form.login h1,
 form.register h1 {
@@ -159,4 +172,22 @@ div.post-page a.edit-btn {
 }
 a svg {
   height: 20px;
+}
+.footer {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.filter-button {
+  margin-bottom: "40px";
+  display: flex;
+}
+
+.pagination-controls {
+  display: flex;
+  margin-top: 35px;
+  justify-content: space-between;
+}
+.pagination-controls button {
+  width: 35%;
 }
