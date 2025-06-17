@@ -1,38 +1,47 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { UserContext } from "../components/UserContext";
 
 export default function RegisterPage() {
   const [first_name, setFirstname] = useState("");
   const [last_name, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { register } = useContext(UserContext);
+  const location = useLocation();
 
   async function handleRegister(ev) {
     ev.preventDefault();
+    setLoading(true);
+    setError("");
 
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      body: JSON.stringify({ first_name, last_name, email, password }),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+    const result = await register(first_name, last_name, email, password);
 
-    if (response.status === 201) {
-      // setRedirect(true);
-      alert("registration successful");
+    if (result.success === true) {
+      setRedirect(true);
     } else {
-      alert("registration failed");
+      setError(result.message || "Wrong credentials");
     }
+    setLoading(false);
   }
 
-  //   if (redirect) {
-  // or navigate to homepage
-  //     return <Navigate to={"/profile"} />;
-  //     }
+  if (redirect) {
+    const from = location.state?.from?.pathname || "/";
+    return <Navigate to={from} replace />;
+  }
 
   return (
     <div className="form-group">
       <form className="register" onSubmit={handleRegister}>
         <h1>Register</h1>
+        {error && (
+          <div className="error" style={{ color: "red", marginBottom: "10px" }}>
+            {error}
+          </div>
+        )}
         <input
           type="text"
           placeholder="First Name"
@@ -57,8 +66,15 @@ export default function RegisterPage() {
           value={password}
           onChange={(ev) => setPassword(ev.target.value)}
         />
-        <button>Sign Up</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Signing up..." : "Sign Up"}
+        </button>
       </form>
+      <div className="footer">
+        <p>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
 }

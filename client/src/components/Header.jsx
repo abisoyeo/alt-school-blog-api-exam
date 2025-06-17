@@ -4,7 +4,6 @@ import { UserContext } from "./UserContext";
 
 export default function Header() {
   const { userInfo, logout } = useContext(UserContext);
-  const token = localStorage.getItem("token");
 
   const handleLogout = async () => {
     await logout();
@@ -21,6 +20,7 @@ export default function Header() {
         {username && (
           <>
             <Link to="/create">Create new post</Link>
+            <Link to="/author-posts">View Your Blogs</Link>
             <a onClick={handleLogout}>Logout ({username})</a>
           </>
         )}

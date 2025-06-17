@@ -33,6 +33,7 @@ exports.signup = async (req, res, next) => {
               user: {
                 id: user._id,
                 email: user.email,
+                first_name: user.first_name,
               },
               token,
             },

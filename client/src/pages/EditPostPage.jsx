@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../components/UserContext";
 import { Navigate, useParams } from "react-router-dom";
 import Editor from "../components/Editor";
 
 export default function EditPost() {
-  const token = localStorage.getItem("token");
+  const { fetchWithAuth } = useContext(UserContext);
 
   const { id } = useParams();
   const [title, setTitle] = useState("");
@@ -11,32 +12,34 @@ export default function EditPost() {
   const [body, setBody] = useState("");
   const [tags, setTags] = useState("");
   const [files, setFiles] = useState("");
+  const [postState, setPostState] = useState("draft");
+  const [postStatus, setPostStatus] = useState("");
+  const [error, setError] = useState("");
+
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/blogs/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      method: "GET",
-      credentials: "include",
-    }).then((response) => {
-      response.json().then((postInfo) => {
+    fetchWithAuth(`/api/blogs/me/${id}`).then((response) => {
+      response.message.json().then((postInfo) => {
         setTitle(postInfo.data.title);
         setDescription(postInfo.data.description);
         setBody(postInfo.data.body);
         setTags(postInfo.data.tags.map((tag) => tag.name).toString());
+        setPostStatus(postInfo.data.state);
       });
     });
   }, []);
 
   async function updatePost(ev) {
     ev.preventDefault();
+    setError("");
+
     const data = new FormData();
     data.set("title", title);
     data.set("description", description);
     data.set("body", body);
-    // data.set("id", id);
+    data.set("state", postState);
+
     if (files?.[0]) {
       data.set("file", files?.[0]);
     }
@@ -45,25 +48,35 @@ export default function EditPost() {
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
     tagArray.forEach((tag) => data.append("tags[]", tag));
-    const response = await fetch(`/api/blogs/me/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+
+    const result = await fetchWithAuth(`/api/blogs/me/${id}`, {
       method: "PUT",
       body: data,
-      credentials: "include",
     });
-    if (response.ok) {
+
+    if (result.success === true) {
       setRedirect(true);
+    } else {
+      const errorData = await result.message;
+      setError(errorData || "Update Failed");
     }
   }
 
   if (redirect) {
-    return <Navigate to={"/post/" + id} />;
+    return <Navigate to={"/author-posts/" + id} />;
   }
 
   return (
     <form onSubmit={updatePost}>
+      {error && (
+        <div className="error" style={{ color: "red", marginBottom: "10px" }}>
+          {error}
+        </div>
+      )}
+      <p>
+        Current Status: <strong>{postStatus.toUpperCase()}</strong>
+      </p>
+
       <input
         type="title"
         placeholder={"Title (Required)"}
@@ -91,7 +104,31 @@ export default function EditPost() {
         onChange={(ev) => setFiles(ev.target.files)}
       />
       <Editor onChange={setBody} value={body} />
-      <button style={{ marginTop: "5px" }}>Update post</button>
+      <label htmlFor="postState">Change Post Status:</label>
+      <select
+        id="postState"
+        value={postState}
+        onChange={(e) => setPostState(e.target.value)}
+      >
+        <option value="draft">Unpublish (Draft)</option>
+        <option value="published">Publish</option>
+      </select>
+
+      <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
+        <button type="submit">Update</button>
+        <button
+          type="button"
+          onClick={async () => {
+            await fetchWithAuth(`/api/blogs/me/${id}`, {
+              method: "DELETE",
+            });
+            return <Navigate to={"/author-posts/"} />;
+          }}
+          style={{ backgroundColor: "#e63946", color: "white" }}
+        >
+          Delete
+        </button>
+      </div>
     </form>
   );
 }

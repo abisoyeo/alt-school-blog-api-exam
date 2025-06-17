@@ -80,6 +80,8 @@ exports.getMyBlogPosts = async (req, res, next) => {
     const authorId = req.user._id;
     const query = req.validated.query || {};
     query.authorId = authorId;
+    query.sort_by = "createdAt";
+    query.order = "desc";
 
     const result = await getAllBlogs(query);
 
