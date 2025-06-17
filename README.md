@@ -31,7 +31,7 @@ _Developed as part of AltSchool Backend Engineering curriculum._
 
 The API is deployed and publicly accessible.
 
-**Base URL:** [`https://abisoye-alt-school-blog-api-exam.onrender.com/api`](https://abisoye-alt-school-blog-api-exam.onrender.com/api)
+**[`Base API URL`](https://abisoye-express-blog-app.onrender.com/api/)**
 
 You can test the endpoints using:
 
@@ -176,8 +176,8 @@ A simple React-based frontend has been developed to interact with this API. It s
 
 The frontend uses the same protected and public routes documented above, with authentication handled via JWT and localStorage.
 
-> **Live Client App:** [Frontend Site](https://abisoye-blog-api-app.pipeops.net)  
-> **Connected API Base URL:** [API Base URL](https://abisoye-blog-api-app.pipeops.net/api/)
+> **Live Client App:** [Frontend Site](https://abisoye-express-blog-app.onrender.com)  
+> **Connected API Base URL:** [API Base URL](https://abisoye-express-blog-app.onrender.com/api/blogs)
 
 ## Project Context
 
@@ -185,8 +185,8 @@ This application was developed as a comprehensive backend engineering assessment
 
 ## Links
 
-- [Frontend Site](https://abisoye-blog-api-app.pipeops.net)
-- [API Base URL](https://abisoye-blog-api-app.pipeops.net/api/)
+- [Frontend Site](https://abisoye-express-blog-app.onrender.com)
+- [API Base URL](https://abisoye-express-blog-app.onrender.com/api/blogs)
 - [Complete API Documentation](https://documenter.getpostman.com/view/23219595/2sB2x6mrsi)
 - [Database ERD](https://drawsql.app/teams/-4258/diagrams/abisoye-blogapierd-exam)
 
