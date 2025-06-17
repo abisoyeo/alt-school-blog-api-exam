@@ -17,7 +17,7 @@ export default function IndexPage() {
           const result = await response.json();
           setPosts(result.data);
           setTotalPages(result.pagination.totalPages);
-          // window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           console.error("Error fetching blogs");
         }
@@ -50,7 +50,7 @@ export default function IndexPage() {
             <button onClick={prevPage} disabled={page === 1}>
               Previous
             </button>
-            <span style={{ margin: "0 10px" }}>
+            <span>
               Page {page} of {totalPages}
             </span>
             <button onClick={nextPage} disabled={page === totalPages}>

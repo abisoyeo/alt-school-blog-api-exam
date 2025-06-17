@@ -31,13 +31,12 @@ _Developed as part of AltSchool Backend Engineering curriculum._
 
 The API is deployed and publicly accessible.
 
-**[`Base API URL`](https://abisoye-express-blog-app.onrender.com/api/)**
+**[Base API URL](https://abisoye-express-blog-app.onrender.com/api/)**
 
 You can test the endpoints using:
 
 - **[Postman Documentation](https://documenter.getpostman.com/view/23219595/2sB2x6mrsi)**
-- **Any HTTP client (Thunder Client, curl, etc.)**
-
+- **Any HTTP client (Postman, Thunder Client, curl, etc.)**
 
 ### Local Development (Optional)
 
@@ -46,7 +45,7 @@ If you want to run the API locally:
 ```bash
 git clone https://github.com/abisoyeo/express-blog-app
 cd express-blog-app
-npm install
+npm install:all
 ```
 
 ### Environment Setup
@@ -151,10 +150,10 @@ updatedAt: Date
 
 ```bash
 # Run all tests
-npm test
+cd server && npm test
 
 # Run with coverage
-npm run test:coverage
+cd server && npm run test:coverage
 ```
 
 ## Tech Stack

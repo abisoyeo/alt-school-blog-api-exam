@@ -21,7 +21,7 @@ function App() {
             <Route index element={<IndexPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/post/:id" element={<PostPage />} />{" "}
+            <Route path="/post/:id" element={<PostPage />} />
             <Route
               path="/create"
               element={
@@ -29,7 +29,7 @@ function App() {
                   <CreatePostPage />
                 </ProtectedRoute>
               }
-            />{" "}
+            />
             <Route
               path="/author-posts"
               element={
@@ -37,7 +37,7 @@ function App() {
                   <AuthorBlogsPage />
                 </ProtectedRoute>
               }
-            />{" "}
+            />
             <Route
               path="/author-posts/:id"
               element={

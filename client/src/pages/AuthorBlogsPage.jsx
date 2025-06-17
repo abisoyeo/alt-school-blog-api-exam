@@ -23,7 +23,7 @@ export default function AuthorPosts() {
           const blogs = await result.message.json();
           setPosts(blogs.data);
           setTotalPages(blogs.pagination.totalPages);
-          // window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           console.error("Error fetching author's posts");
           const errorData = await result.message;
@@ -84,7 +84,7 @@ export default function AuthorPosts() {
             <button onClick={prevPage} disabled={page === 1}>
               Previous
             </button>
-            <span style={{ margin: "0 10px" }}>
+            <span>
               Page {page} of {totalPages}
             </span>
             <button onClick={nextPage} disabled={page === totalPages}>
