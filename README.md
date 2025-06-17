@@ -44,8 +44,8 @@ You can test the endpoints using:
 If you want to run the API locally:
 
 ```bash
-git clone https://github.com/abisoyeo/alt-school-blog-api-exam.git
-cd alt-school-blog-api-exam
+git clone https://github.com/abisoyeo/express-blog-app
+cd express-blog-app
 npm install
 ```
 
@@ -57,7 +57,11 @@ Create a `.env` file in the root directory:
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/blogging-api
 JWT_SECRET=your-jwt-secret-key
+JWT_REFRESH_SECRET=your-jwt-refresh-secret-key
 NODE_ENV=development
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
 ### Running the Application
@@ -66,8 +70,12 @@ NODE_ENV=development
 # Development
 npm run dev
 
+# Production
+npm --prefix client install && npm --prefix client run build && npm --prefix server install
+npm --prefix server run start
+
 # Run tests
-npm test
+cd server && npm test
 ```
 
 ## API Documentation
@@ -157,13 +165,28 @@ npm run test:coverage
 - **Authentication:** JWT
 - **Testing:** Jest & Supertest
 
+## Frontend – React Client
+
+A simple React-based frontend has been developed to interact with this API. It supports:
+
+- Viewing published blog posts
+- Author login & protected dashboard
+- Post creation, editing, publishing, and deletion
+- Image uploads and tag management
+
+The frontend uses the same protected and public routes documented above, with authentication handled via JWT and localStorage.
+
+> **Live Client App:** [Frontend Site](https://abisoye-blog-api-app.pipeops.net)  
+> **Connected API Base URL:** [API Base URL](https://abisoye-blog-api-app.pipeops.net/api/)
+
 ## Project Context
 
-This API was developed as a comprehensive backend engineering assessment, demonstrating proficiency in Node.js ecosystem, REST API design, authentication patterns, and database modeling.
+This application was developed as a comprehensive backend engineering assessment, demonstrating proficiency in Node.js ecosystem, REST API design, authentication patterns, and database modeling.
 
 ## Links
 
-- [API](https://abisoye-alt-school-blog-api-exam.onrender.com/api/blogs)
+- [Frontend Site](https://abisoye-blog-api-app.pipeops.net)
+- [API Base URL](https://abisoye-blog-api-app.pipeops.net/api/)
 - [Complete API Documentation](https://documenter.getpostman.com/view/23219595/2sB2x6mrsi)
 - [Database ERD](https://drawsql.app/teams/-4258/diagrams/abisoye-blogapierd-exam)
 
