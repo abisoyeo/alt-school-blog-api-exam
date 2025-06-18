@@ -133,12 +133,12 @@ form.register h1 {
 }
 
 div.post-page div.image {
-  max-height: 300px;
+  max-height: 450px;
   display: flex;
   overflow: hidden;
 }
 div.post-page div.image img {
-  object-fit: cover;
+  object-fit: fill;
   object-position: center center;
   width: 100%;
 }

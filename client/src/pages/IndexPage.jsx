@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import Post from "../components/Post";
+import { useSearchParams } from "react-router-dom";
 
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = parseInt(searchParams.get("page")) || 1;
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`/api/blogs?page=${page}&limit=5`);
         setLoading(true);
-
+        const response = await fetch(`/api/blogs?page=${currentPage}&limit=5`);
         if (response.ok) {
           const result = await response.json();
           setPosts(result.data);
@@ -29,13 +31,12 @@ export default function IndexPage() {
     }
 
     fetchData();
-  }, [page]);
+  }, [currentPage]);
 
-  if (loading) {
-    return <div>Loading posts...</div>;
-  }
-  const nextPage = () => setPage((p) => Math.min(p + 1, totalPages));
-  const prevPage = () => setPage((p) => Math.max(p - 1, 1));
+  const nextPage = () =>
+    setSearchParams({ page: Math.min(currentPage + 1, totalPages) });
+  const prevPage = () =>
+    setSearchParams({ page: Math.max(currentPage - 1, 1) });
 
   return (
     <>
@@ -47,13 +48,13 @@ export default function IndexPage() {
             <Post key={post._id} {...post} />
           ))}
           <div className="pagination-controls">
-            <button onClick={prevPage} disabled={page === 1}>
+            <button onClick={prevPage} disabled={currentPage === 1}>
               Previous
             </button>
             <span>
-              Page {page} of {totalPages}
+              Page {currentPage} of {totalPages}
             </span>
-            <button onClick={nextPage} disabled={page === totalPages}>
+            <button onClick={nextPage} disabled={currentPage === totalPages}>
               Next
             </button>
           </div>

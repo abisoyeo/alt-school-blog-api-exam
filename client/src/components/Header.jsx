@@ -13,9 +13,10 @@ export default function Header() {
 
   return (
     <header>
-      <Link to="/" className="logo">
+      <Link to="/?page=1" className="logo">
         Express Blog
       </Link>
+
       <nav>
         {username && (
           <>
