@@ -57,6 +57,13 @@ export default function PostPage() {
       <div className="image">
         <img src={postInfo.image} alt="" />
       </div>
+      <span>
+        {postInfo.tags.map((tag) => (
+          <span key={tag.name} className="blog-tag">
+            #{tag.name}
+          </span>
+        ))}
+      </span>
       <div
         className="content"
         dangerouslySetInnerHTML={{ __html: postInfo.body }}
